@@ -4,6 +4,7 @@ import App from "./App";
 import { UploadAsset } from "./components/UploadAsset/UploadAsset";
 import { MainLayout } from "./Layout/MainLayout";
 import { CreateContent } from "./components/CreateContent/CreateContent";
+import { ShowVideos } from "./components/showVideos/ShowVideos";
 
 export const Routing = ({ updateAuthToken }) => {
   const routes = createBrowserRouter([
@@ -28,6 +29,14 @@ export const Routing = ({ updateAuthToken }) => {
       element: (
         <MainLayout>
           <CreateContent />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "/videos",
+      element: (
+        <MainLayout>
+          <ShowVideos />
         </MainLayout>
       ),
     },
