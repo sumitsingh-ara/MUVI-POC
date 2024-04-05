@@ -75,7 +75,9 @@ export const UploadAsset = () => {
       </div>
 
       <div style={{ marginTop: "20px" }}>
-        <Button onClick={uploadVideo}>Upload File</Button>
+        <Button disabled={loading} loading={loading} onClick={uploadVideo}>
+          Upload File
+        </Button>
       </div>
 
       {contextHolder}
