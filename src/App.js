@@ -1,23 +1,17 @@
-import logo from './logo.svg';
-import './App.css';
+import { AccessToken } from "./components/AccessToken/AccessToken";
+import { useState } from "react";
 
-function App() {
+function App({ updateAuthToken }) {
+  const [fetchingToken, setFetchingToken] = useState(true);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {fetchingToken && (
+        <AccessToken
+          updateAuthToken={updateAuthToken}
+          setFetchingToken={setFetchingToken}
+        />
+      )}
     </div>
   );
 }
