@@ -11,7 +11,6 @@ export const ShowVideos = ({ token }) => {
   useEffect(() => {
     if (!token) navigate("/");
     async function fetchContentsList() {
-      debugger;
       try {
         const {
           data: {
@@ -45,19 +44,30 @@ export const ShowVideos = ({ token }) => {
   }
 
   return (
-    <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-around",
+        flexWrap: "wrap",
+      }}
+    >
       {contentsVideos.map((item, index) => {
         return (
           <div
             key={index}
             style={{
-              width: "30%",
-              minHeight: "300px",
+              width: "31%",
+              minHeight: "250px",
+              margin: "10px",
             }}
           >
             <iframe
-              style={{ width: "100%", height: "100%" }}
-              title="d"
+              style={{
+                width: "100%",
+                minHeight: "100%",
+                borderRadius: "3%",
+              }}
+              title="videos"
               src={item}
               allowFullScreen
               allow="encrypted-media"
