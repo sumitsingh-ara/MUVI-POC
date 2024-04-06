@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getEmbdedLinks, postFetchContentsList } from "./show-videos.service";
-import { Skeleton } from "antd";
+import { Col, Row, Skeleton } from "antd";
 import { useNavigate } from "react-router-dom";
 
 export const ShowVideos = ({ token }) => {
@@ -12,6 +12,7 @@ export const ShowVideos = ({ token }) => {
     if (!token) navigate("/");
     async function fetchContentsList() {
       try {
+        debugger;
         const {
           data: {
             contentList: { content_list },
@@ -24,11 +25,10 @@ export const ShowVideos = ({ token }) => {
         const results = await Promise.all(promises);
         const modifiedResults = results.map(({ data }) => {
           const srcRegex = /src\s*=\s*"([^"]*)"/i;
-          const match = data.match(srcRegex);
+          const match = data?.match(srcRegex);
           const srcValue = match ? match[1] : null;
           return srcValue;
         });
-
         setContentsVideos(modifiedResults);
       } catch (err) {
         console.log(err);
@@ -44,27 +44,20 @@ export const ShowVideos = ({ token }) => {
   }
 
   return (
-    <div
+    <Row
+      gutter={[16, 16]}
       style={{
-        display: "flex",
-        justifyContent: "space-around",
-        flexWrap: "wrap",
+        justifyContent: "center",
+        padding: "10px",
       }}
     >
       {contentsVideos.map((item, index) => {
         return (
-          <div
-            key={index}
-            style={{
-              width: "31%",
-              minHeight: "250px",
-              margin: "10px",
-            }}
-          >
+          <Col xs={20} sm={10} md={8} lg={6} xl={6} key={index}>
             <iframe
               style={{
                 width: "100%",
-                minHeight: "100%",
+                minHeight: "200px",
                 borderRadius: "3%",
               }}
               title="videos"
@@ -72,9 +65,9 @@ export const ShowVideos = ({ token }) => {
               allowFullScreen
               allow="encrypted-media"
             ></iframe>
-          </div>
+          </Col>
         );
       })}
-    </div>
+    </Row>
   );
 };

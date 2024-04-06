@@ -61,7 +61,7 @@ export const UploadAsset = ({ token }) => {
   }
 
   return (
-    <div style={{ textAlign: "center" }}>
+    <div style={{ textAlign: "center", marginTop: "20px" }}>
       <div style={{ width: "50%", margin: "auto" }}>
         <Dragger {...props} disabled={loading}>
           <p className="ant-upload-drag-icon">

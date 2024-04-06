@@ -15,7 +15,7 @@ export const MainLayout = ({ children }) => {
   return (
     <div>
       <Navbar />
-      <div style={{ marginTop: "10px" }}>
+      <div>
         <WithToken token={token} setToken={setToken}>
           {children}
         </WithToken>

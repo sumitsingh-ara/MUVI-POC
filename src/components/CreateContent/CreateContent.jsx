@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { createContent, postFetchAssetsList } from "./create-content.service";
-import { Button, Form, Input, Select, Space, notification } from "antd";
+import { Button, Form, Input, Row, Select, Space, notification } from "antd";
 import { useNavigate } from "react-router-dom";
 const { Option } = Select;
 
@@ -94,14 +94,17 @@ export const CreateContent = ({ token }) => {
   }, [navigate, token]);
 
   return (
-    <div style={{ width: "50%", margin: "auto" }}>
+    <Row
+      style={{ marginTop: "20px", padding: "5px", justifyContent: "center" }}
+    >
       <Form
         {...layout}
         form={form}
         name="control-hooks"
         onFinish={onFinish}
         style={{
-          maxWidth: 600,
+          width: "90%",
+          maxWidth: "800px",
         }}
       >
         <Form.Item
@@ -165,6 +168,6 @@ export const CreateContent = ({ token }) => {
         </Form.Item>
       </Form>
       {contextHolder}
-    </div>
+    </Row>
   );
 };
