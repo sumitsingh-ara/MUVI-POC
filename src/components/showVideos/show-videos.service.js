@@ -1,11 +1,11 @@
 import axios from "axios";
 
 // Function to make a GET Contents List request
-export const postFetchContentsList = async () => {
+export const postFetchContentsList = async ({ token }) => {
   try {
     const myHeaders = {
       "Content-Type": `application/json`,
-      Authorization: process.env.REACT_APP_TOKEN,
+      Authorization: token,
     };
     const response = await axios.post(
       `/content`,
@@ -23,11 +23,11 @@ export const postFetchContentsList = async () => {
 };
 
 // Function to make a GET Embded Links request
-export const getEmbdedLinks = async (content_uuid) => {
+export const getEmbdedLinks = async ({ content_uuid, token }) => {
   try {
     const myHeaders = {
       "Content-Type": `application/json`,
-      Authorization: process.env.REACT_APP_TOKEN,
+      Authorization: token,
     };
     const response = await axios.post(
       `/content/embed/generate`,

@@ -6,13 +6,13 @@ import { MainLayout } from "./Layout/MainLayout";
 import { CreateContent } from "./components/CreateContent/CreateContent";
 import { ShowVideos } from "./components/showVideos/ShowVideos";
 
-export const Routing = ({ updateAuthToken }) => {
+export const Routing = () => {
   const routes = createBrowserRouter([
     {
       path: "/",
       element: (
         <MainLayout>
-          <App updateAuthToken={updateAuthToken} />
+          <App />
         </MainLayout>
       ),
     },

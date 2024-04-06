@@ -1,25 +1,15 @@
 import { useEffect, useState } from "react";
 import { createContent, postFetchAssetsList } from "./create-content.service";
 import { Button, Form, Input, Select, Space, notification } from "antd";
+import { useNavigate } from "react-router-dom";
 const { Option } = Select;
 
-export const CreateContent = () => {
+export const CreateContent = ({ token }) => {
   const [assetsList, setAssetsList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const [api, contextHolder] = notification.useNotification();
-
-  useEffect(() => {
-    async function getAssets() {
-      const {
-        data: {
-          assetList: { asset_list },
-        },
-      } = await postFetchAssetsList();
-      setAssetsList(asset_list);
-    }
-    getAssets();
-  }, []);
+  const navigate = useNavigate();
 
   const layout = {
     labelCol: {
@@ -61,7 +51,7 @@ export const CreateContent = () => {
 
     try {
       setLoading(true);
-      const { code, message, data } = await createContent(payload);
+      const { code, message, data } = await createContent({ payload, token });
       if (code === 200) {
         api.success({
           message,
@@ -85,6 +75,23 @@ export const CreateContent = () => {
   const onReset = () => {
     form.resetFields();
   };
+
+  useEffect(() => {
+    if (!token) navigate("/");
+    async function getAssets() {
+      try {
+        const {
+          data: {
+            assetList: { asset_list },
+          },
+        } = await postFetchAssetsList({ token });
+        setAssetsList(asset_list);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    getAssets();
+  }, [navigate, token]);
 
   return (
     <div style={{ width: "50%", margin: "auto" }}>

@@ -1,11 +1,11 @@
 import axios from "axios";
 
 // Function to make a GET Assets List request
-export const postFetchAssetsList = async () => {
+export const postFetchAssetsList = async ({ token }) => {
   try {
     const myHeaders = {
       "Content-Type": `application/json`,
-      Authorization: process.env.REACT_APP_TOKEN,
+      Authorization: token,
     };
     const response = await axios.post(
       `/library`,
@@ -15,7 +15,7 @@ export const postFetchAssetsList = async () => {
       },
       { headers: myHeaders }
     );
-    return response.data;
+    return response?.data;
   } catch (error) {
     console.error("Error in GET request:", error);
     throw error;
@@ -23,11 +23,11 @@ export const postFetchAssetsList = async () => {
 };
 
 // Function to make a GET Assets List request
-export const createContent = async (payload) => {
+export const createContent = async ({ payload, token }) => {
   try {
     const myHeaders = {
       "Content-Type": `application/json`,
-      Authorization: process.env.REACT_APP_TOKEN,
+      Authorization: token,
     };
     const response = await axios.post(`/content/save`, payload, {
       headers: myHeaders,

@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import { InboxOutlined } from "@ant-design/icons";
 import { Button, Upload, notification } from "antd";
 import { uploadAsset } from "./upload-asset.service";
+import { useNavigate } from "react-router-dom";
 
 const { Dragger } = Upload;
 
-export const UploadAsset = () => {
+export const UploadAsset = ({ token }) => {
   const [fileList, setFileList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const [api, contextHolder] = notification.useNotification();
 
   const props = {
     name: "file",
@@ -22,8 +25,6 @@ export const UploadAsset = () => {
     },
   };
 
-  const [api, contextHolder] = notification.useNotification();
-
   async function uploadVideo() {
     if (!fileList.length) {
       api.error({
@@ -32,9 +33,11 @@ export const UploadAsset = () => {
       });
       return;
     }
+    if (!token) navigate("/");
+
     try {
       setLoading(true);
-      const { code, message, data } = await uploadAsset(fileList);
+      const { code, message, data } = await uploadAsset({ fileList, token });
       if (code === 200) {
         setFileList([]);
         api.success({
