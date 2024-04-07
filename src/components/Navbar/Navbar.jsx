@@ -4,10 +4,9 @@ import { Link } from "react-router-dom";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 
 export const data = [
-  { key: "token", label: "Fetch Token", path: "/" },
-  { key: "upload", label: "Asset Upload", path: "/upload" },
-  { key: "creation", label: "Content Creation", path: "/creation" },
+  { key: "upload", label: "Upload Video", path: "/upload" },
   { key: "videos", label: "Show Videos", path: "/videos" },
+  { key: "stream", label: "Watch Live Stream", path: "/stream" },
 ];
 
 export const Navbar = () => {

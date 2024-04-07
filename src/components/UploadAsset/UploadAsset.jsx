@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import { InboxOutlined } from "@ant-design/icons";
-import { Button, Upload, notification } from "antd";
-import { uploadAsset } from "./upload-asset.service";
-import { useNavigate } from "react-router-dom";
+import { Button, Input, Upload, notification } from "antd";
+import { getUploadVideoCredetials, uploadAsset } from "./upload-asset.service";
 
 const { Dragger } = Upload;
 
-export const UploadAsset = ({ token }) => {
+export const UploadAsset = () => {
   const [fileList, setFileList] = useState([]);
+  const [contentName, setContentName] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const [api, contextHolder] = notification.useNotification();
 
   const props = {
@@ -26,28 +25,38 @@ export const UploadAsset = ({ token }) => {
   };
 
   async function uploadVideo() {
-    if (!fileList.length) {
+    if (!fileList.length || !contentName.trim().length) {
       api.error({
         message: "Upload Failed",
-        description: "Please Choose a file to upload ",
+        description: !fileList.length
+          ? "Please Choose a file to upload"
+          : "Please Enter Content Name",
       });
       return;
     }
-    if (!token) navigate("/");
 
     try {
       setLoading(true);
-      const { code, message, data } = await uploadAsset({ fileList, token });
-      if (code === 200) {
+      const uploadCredentials = await getUploadVideoCredetials({
+        content_name: contentName.trim(),
+      });
+
+      const uploadResponse = await uploadAsset({
+        fileList,
+        uploadCredentials,
+      });
+      if (uploadResponse.status === 201) {
         setFileList([]);
+        setContentName("");
         api.success({
-          message,
-          description: data[0].file_name,
+          message: "File Uploaded Successfully",
+          description:
+            "Please wait for sometime to get the file ready to serve",
         });
       } else {
         api.error({
-          message,
-          description: data[0].file_name,
+          message: "Upload Failed",
+          description: fileList[0].file_name,
         });
       }
     } catch (error) {
@@ -62,7 +71,16 @@ export const UploadAsset = ({ token }) => {
 
   return (
     <div style={{ textAlign: "center", marginTop: "20px" }}>
-      <div style={{ width: "50%", margin: "auto" }}>
+      <div style={{ width: "70%", margin: "auto", marginBottom: "20px" }}>
+        <Input
+          placeholder="Please Enter Content Name"
+          value={contentName}
+          onChange={({ target: { value } }) => {
+            setContentName(value);
+          }}
+        />
+      </div>
+      <div style={{ width: "70%", margin: "auto" }}>
         <Dragger {...props} disabled={loading}>
           <p className="ant-upload-drag-icon">
             <InboxOutlined />
@@ -79,7 +97,7 @@ export const UploadAsset = ({ token }) => {
 
       <div style={{ marginTop: "20px" }}>
         <Button disabled={loading} loading={loading} onClick={uploadVideo}>
-          Upload File
+          Upload File & Create Content
         </Button>
       </div>
 
