@@ -4,6 +4,7 @@ import App from "./App";
 import { UploadAsset } from "./components/UploadAsset/UploadAsset";
 import { MainLayout } from "./Layout/MainLayout";
 import { ShowVideos } from "./components/showVideos/ShowVideos";
+import { ShowStreaming } from "./components/showStreaming/ShowStreaming";
 
 export const Routing = () => {
   const routes = createBrowserRouter([
@@ -28,6 +29,14 @@ export const Routing = () => {
       element: (
         <MainLayout>
           <ShowVideos />
+        </MainLayout>
+      ),
+    },
+    {
+      path: "/stream",
+      element: (
+        <MainLayout>
+          <ShowStreaming />
         </MainLayout>
       ),
     },

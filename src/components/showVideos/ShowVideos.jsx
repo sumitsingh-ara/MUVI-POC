@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { fetchContentsList } from "./show-videos.service";
-import { Col, Row, Skeleton } from "antd";
+import { Col, Row, Skeleton, notification } from "antd";
 
 export const ShowVideos = () => {
   const [loading, setLoading] = useState(true);
   const [contentsVideos, setContentsVideos] = useState([]);
-  const [currentPlayingIndex, setCurrentPlayingIndex] = useState(null);
+  const [api, contextHolder] = notification.useNotification();
 
   useEffect(() => {
     async function fetchContents() {
@@ -16,35 +16,16 @@ export const ShowVideos = () => {
         });
         setContentsVideos(modifiedResults);
       } catch (err) {
-        console.log(err);
+        api.error({
+          message: err.message,
+          description: err.name,
+        });
       }
       setLoading(false);
     }
     fetchContents();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const playVideo = (index) => {
-    // Pause currently playing video
-    if (currentPlayingIndex !== null) {
-      const iframe = document.getElementById(`iframe-${currentPlayingIndex}`);
-      if (iframe) {
-        iframe.contentWindow.postMessage(
-          JSON.stringify({ event: "command", func: "pauseVideo" }),
-          "*"
-        );
-      }
-    }
-
-    // Play clicked video
-    const iframe = document.getElementById(`iframe-${index}`);
-    if (iframe) {
-      iframe.contentWindow.postMessage(
-        JSON.stringify({ event: "command", func: "playVideo" }),
-        "*"
-      );
-      setCurrentPlayingIndex(index);
-    }
-  };
 
   if (loading) {
     return <Skeleton active />;
@@ -75,6 +56,7 @@ export const ShowVideos = () => {
           </Col>
         );
       })}
+      {contextHolder}
     </Row>
   );
 };

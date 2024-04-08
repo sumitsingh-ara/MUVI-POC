@@ -1,50 +1,28 @@
 import { useEffect, useState } from "react";
-import { fetchContentsList } from "./show-videos.service";
+import { fetchStreamsList } from "./show-streaming.service";
 import { Col, Row, Skeleton } from "antd";
 
-export const ShowVideos = () => {
+export const ShowStreaming = () => {
   const [loading, setLoading] = useState(true);
   const [contentsVideos, setContentsVideos] = useState([]);
-  const [currentPlayingIndex, setCurrentPlayingIndex] = useState(null);
 
   useEffect(() => {
-    async function fetchContents() {
+    async function fetchStreamingChannels() {
       try {
-        const { data } = await fetchContentsList();
-        const modifiedResults = data.map(({ share_code: { facebook } }) => {
-          return facebook;
-        });
+        const { data } = await fetchStreamsList();
+        const modifiedResults = data.map(
+          ({ title, share_code: { facebook } }) => {
+            return { url: facebook, title };
+          }
+        );
         setContentsVideos(modifiedResults);
       } catch (err) {
         console.log(err);
       }
       setLoading(false);
     }
-    fetchContents();
+    fetchStreamingChannels();
   }, []);
-
-  const playVideo = (index) => {
-    // Pause currently playing video
-    if (currentPlayingIndex !== null) {
-      const iframe = document.getElementById(`iframe-${currentPlayingIndex}`);
-      if (iframe) {
-        iframe.contentWindow.postMessage(
-          JSON.stringify({ event: "command", func: "pauseVideo" }),
-          "*"
-        );
-      }
-    }
-
-    // Play clicked video
-    const iframe = document.getElementById(`iframe-${index}`);
-    if (iframe) {
-      iframe.contentWindow.postMessage(
-        JSON.stringify({ event: "command", func: "playVideo" }),
-        "*"
-      );
-      setCurrentPlayingIndex(index);
-    }
-  };
 
   if (loading) {
     return <Skeleton active />;
@@ -61,17 +39,20 @@ export const ShowVideos = () => {
       {contentsVideos.map((item, index) => {
         return (
           <Col xs={20} sm={10} md={8} lg={6} xl={6} key={index}>
-            <iframe
-              style={{
-                width: "100%",
-                minHeight: "200px",
-                borderRadius: "3%",
-              }}
-              title="videos"
-              src={item}
-              allowFullScreen
-              allow="encrypted-media"
-            ></iframe>
+            <div style={{ textAlign: "center" }}>
+              <h3>Channel Name - {item.title}</h3>
+              <iframe
+                style={{
+                  width: "100%",
+                  minHeight: "200px",
+                  borderRadius: "3%",
+                }}
+                title="videos"
+                src={item.url}
+                allowFullScreen
+                allow="encrypted-media"
+              ></iframe>
+            </div>
           </Col>
         );
       })}
